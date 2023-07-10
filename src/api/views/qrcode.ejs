@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QR Code Generator</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+    crossorigin="anonymous"
+  />
+  <style>
+    body {
+      padding-top: 70px;
+    }
+    img{
+      width: 200px;
+      height: 200px;
+    }
+    #scan{
+          margin-left: 95px;
+        }
+
+        #generate{
+          margin-right: 95px;
+        }
+  </style>
+</head>
+<body class="bg-body-tertiary">
+  <nav class="navbar navbar-dark bg-dark fixed-top ">
+    <div class="container justify-content-center">
+      <a id="generate" class="navbar-brand" href="/">QR Code Generator</a>
+        <div id="scan" class=" nav nav-pills flex-column flex-sm-row">
+          <a class="flex-sm-fill text-sm-center nav-link active" href="/qrscaner">QR Code Scaner</a>
+        </div>
+    </div>
+  </nav>
+
+  <div class="container py-4 text-center">
+    <h1>Your QRCode download and view</h1>
+    <div class="row justify-content-center">
+      <% Files.forEach((file) => { %>
+        <div class="col-md-auto mb-4">
+          <div class="card h-100">
+            <img class="card-img-top" src=<%= '/' + file.image %> alt="qrcode">
+          </div>
+        </div>
+      <% }) %>
+    </div>
+    <% Files.forEach((file) => { %>
+      <a download class="btn btn-primary mt-3" href=<%= '/' + file.image %> >
+        <i class="fa fa-download"></i>  Download
+      </a>
+    <% }) %>
+  </div>
+  
+
+
+  <script>
+    document.getElementById('downloadBtn').addEventListener('click', function() {
+      // Send an AJAX request to the server to get the file URL
+      fetch('/getDownloadURL')
+        .then(response => response.json())
+        .then(data => {
+          // Redirect or open a new window/tab to initiate the file download
+          window.open(data.downloadURL);
+        })
+        .catch(error => console.log(error));
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+    crossorigin="anonymous"></script>
+</body>
+</html>
